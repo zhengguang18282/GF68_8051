@@ -200,6 +200,7 @@ unsigned char CheckP0B4PressTime(unsigned short Min, unsigned short Max)
 // 255KHz Sample Rate, So 200-300 conters
 unsigned char calculate_pwm_frequency ()
 {
+#if 0
 	unsigned short timercount = 0x0000;
 	Set_Timer0();
 	Start_Stop_timer();
@@ -210,6 +211,8 @@ unsigned char calculate_pwm_frequency ()
 	else if (timercount >=77 && timercount <=94 ) return 3;		// about 2.7KHz~3.3KHz
 	else if(timercount >=23 && timercount <=28 ) return 10;		// about 9KHz~11Hz for USB reset
 	else return false;									// other false
+#endif
+	return 1;
 }
 
 void Set_Timer0()
