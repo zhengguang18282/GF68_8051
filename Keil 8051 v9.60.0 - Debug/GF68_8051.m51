@@ -1,4 +1,4 @@
-LX51 LINKER/LOCATER V4.66.97.0                                                          03/12/2021  09:08:53  PAGE 1
+LX51 LINKER/LOCATER V4.66.97.0                                                          03/12/2021  13:42:20  PAGE 1
 
 
 LX51 LINKER/LOCATER V4.66.97.0, INVOKED BY:
@@ -64,7 +64,7 @@ START     STOP      LENGTH    ALIGN  RELOC    MEMORY CLASS   SEGMENT NAME
 000296H   000299H   000004H   BYTE   UNIT     CODE           ?PR?SILABS_STARTUP?GF68_8051_MAIN
 00029AH   00029CH   000003H   BYTE   UNIT     CODE           ?PR?CALCULATE_PWM_FREQUENCY?GF68_8051_MAIN
 00029DH   00029FH   000003H   BYTE   UNIT     CODE           ?PR?INIT_DEVICE?GF68_8051_MAIN
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 2
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 2
 
 
 
@@ -129,7 +129,7 @@ PUBLIC SYMBOLS OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
 
       VALUE       CLASS    TYPE      PUBLIC SYMBOL NAME
       =================================================
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 3
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 3
 
 
       00000000H   NUMBER   ---       ?C?CODESEG
@@ -194,7 +194,7 @@ PUBLIC SYMBOLS OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
 *SFR* 000000F6H   DATA     BYTE      EIP1
 *SFR* 000000B7H   DATA     BYTE      FLKEY
 *SFR* 000000B6H   DATA     BYTE      FLSCL
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 4
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 4
 
 
 *SFR* 000000A8H   DATA     BYTE      IE
@@ -259,7 +259,7 @@ PUBLIC SYMBOLS OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
 *SFR* 0000008FH   DATA     BYTE      PSCTL
 *SFR* 000000D0H   DATA     BYTE      PSW
 *SFR* 000000D0H.6 DATA     BIT       PSW_AC
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 5
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 5
 
 
 *SFR* 000000D0H.7 DATA     BIT       PSW_CY
@@ -324,7 +324,7 @@ PUBLIC SYMBOLS OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
 *SFR* 000000C8H.7 DATA     BIT       TMR2CN_TF2H
 *SFR* 000000C8H.6 DATA     BIT       TMR2CN_TF2L
 *SFR* 000000C8H.5 DATA     BIT       TMR2CN_TF2LEN
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 6
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 6
 
 
 *SFR* 000000C8H.2 DATA     BIT       TMR2CN_TR2
@@ -389,7 +389,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       000000C4H   SFRSYM    DATA     BYTE      ADC0GT
       000000F0H.2 SFRSYM    DATA     BIT       B_B2
       000000FBH   SFRSYM    DATA     BYTE      PCA0CPL0
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 7
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 7
 
 
       000000F0H.3 SFRSYM    DATA     BIT       B_B3
@@ -454,7 +454,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       000000A8H.6 SFRSYM    DATA     BIT       IE_IEGF0
       000000A8H.0 SFRSYM    DATA     BIT       IE_EX0
       000000A8H.2 SFRSYM    DATA     BIT       IE_EX1
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 8
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 8
 
 
       0000009FH   SFRSYM    DATA     BYTE      CPT0MX
@@ -519,7 +519,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       000000C2H   SFRSYM    DATA     BYTE      SMB0DAT
       000000C0H.5 SFRSYM    DATA     BIT       SMB0CN_STA
       000000CDH   SFRSYM    DATA     BYTE      TMR2H
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 9
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 9
 
 
       0000008EH   SFRSYM    DATA     BYTE      CKCON
@@ -584,7 +584,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       0100005BH   LINE      CODE     ---       #96
       0100005BH   LINE      CODE     ---       #98
       01000064H   LINE      CODE     ---       #99
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 10
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 10
 
 
       01000064H   LINE      CODE     ---       #100
@@ -649,7 +649,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       010000F5H   LINE      CODE     ---       #162
       010000F8H   LINE      CODE     ---       #163
       010000FAH   LINE      CODE     ---       #164
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 11
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 11
 
 
       010000FDH   LINE      CODE     ---       #165
@@ -714,7 +714,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
 
       0100029DH   BLOCK     CODE     ---       LVL=0
       0100029DH   LINE      CODE     ---       #289
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 12
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 12
 
 
       0100029DH   LINE      CODE     ---       #290
@@ -779,7 +779,7 @@ SYMBOL TABLE OF MODULE:  GF68_8051.OMF.CRBUILD (GF68_8051_MAIN)
       ---         BLOCKEND  ---      ---       LVL=0
 
       ---         MODULE    ---      ---       ?C_STARTUP
-LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  09:08:53  PAGE 13
+LX51 LINKER/LOCATER V4.66.97.0                                                        03/12/2021  13:42:20  PAGE 13
 
 
       01000000H   PUBLIC    CODE     NEAR LAB  ?C_STARTUP

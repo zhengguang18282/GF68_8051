@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 1   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE GF68_8051_MAIN
@@ -63,7 +63,7 @@ line level    source
   50          // ----------------------------------------------------------------------------
   51          // Note: the software watchdog timer is not disabled by default in this
   52          // example, so a long-running program will reset periodically unless
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 2   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 2   
 
   53          // the timer is disabled or your program periodically writes to it.
   54          //
@@ -128,7 +128,7 @@ line level    source
  113   5                                      }
  114   4      
  115   4                                      if(!P0_B6)
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 3   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 3   
 
  116   4                                      {
  117   5                                              BootFlag = 0x01;
@@ -193,7 +193,7 @@ line level    source
  176   3                              break;
  177   3                      }
  178   2      
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 4   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 4   
 
  179   2              }                             // Spin forever
  180   1      }
@@ -258,7 +258,7 @@ line level    source
  239   3                              TCON_TR0=0;
  240   3                              TL0Temp= TL0;
  241   3                              TH0Temp= TH0;
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 5   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 5   
 
  242   3                      }
  243   2              }
@@ -301,7 +301,7 @@ line level    source
  280   1          // P0.7  -  Unassigned,  Open-Drain, Digital
  281   1      
  282   1          P0MDOUT   |= 0x2D;
- 283   1          P0        = 0x39;
+ 283   1          P0        &= ~0x04;
  284   1          XBR2      = 0xC0;
  285   1      }
  286          
@@ -323,7 +323,7 @@ line level    source
  302   1          CKCON |= 0x10;
  303   1      
  304   1              while (m_second)
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 6   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 6   
 
  305   1              {
  306   2                      //TR1 = 0;
@@ -388,7 +388,7 @@ line level    source
  365   1              TMR2CN_TR2 = 1;                         // Enable timer2
  366   1              //ET2 = 1;
  367   1              IE_ET2 = 1;                             // Enable Timer2 interrupt
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 09:08:53 PAGE 7   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 7   
 
  368   1              //EA = 1;                                       // Enable All interrupt control
  369   1      }
