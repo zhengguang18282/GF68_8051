@@ -41,6 +41,8 @@ unsigned char calculate_pwm_frequency (void);
 unsigned char BootStage;
 unsigned char BootFlag;
 
+unsigned char ResetTimes;
+
 unsigned short timer2recording = 0x0000;
 unsigned char TL0Temp = 0x00;
 unsigned char TH0Temp = 0x00;
@@ -104,7 +106,7 @@ int main (void)
 			}
 			else if(BootFlag == 0x03)
 			{
-				if(timer2recording > 55000)
+				if(timer2recording > 550)
 				{
 					BootFlag = 0x01;
 					BootStage = BOOT_FAIL;
@@ -120,7 +122,8 @@ int main (void)
 					break;
 				}
 
-				if(calculate_pwm_frequency() ==1)
+				//if(calculate_pwm_frequency() ==1)
+				if(!P0_B7)
 				{
 					BootFlag = 0x11;
 					BootStage = IDLE;
@@ -129,6 +132,7 @@ int main (void)
 			}
 			break;
 		case IDLE:
+#if 0
 			if(BootFlag == 0x11)
 			{
 				if(!P0_B6)
@@ -156,6 +160,7 @@ int main (void)
 				BootStage = STARTUP;
 				Timer2_Enable();
 			}
+#endif
 			break;
 		case BOOT_FAIL:
 			P0_B3=0;
