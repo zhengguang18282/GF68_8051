@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 1   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE GF68_8051_MAIN
@@ -63,7 +63,7 @@ line level    source
   50          // ----------------------------------------------------------------------------
   51          // Note: the software watchdog timer is not disabled by default in this
   52          // example, so a long-running program will reset periodically unless
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 2   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 2   
 
   53          // the timer is disabled or your program periodically writes to it.
   54          //
@@ -100,7 +100,7 @@ line level    source
   85   4                                      {
   86   5                                              while(!P0_B6)
   87   5                                              {
-  88   6                                                      if(timer2recording > 5000)
+  88   6                                                      if(timer2recording > 50)
   89   6                                                      {
   90   7                                                              BootFlag = 0x01;
   91   7                                                              BootStage = BOOT_FAIL;
@@ -128,7 +128,7 @@ line level    source
  113   5                                      }
  114   4      
  115   4                                      if(!P0_B6)
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 3   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 3   
 
  116   4                                      {
  117   5                                              BootFlag = 0x01;
@@ -193,7 +193,7 @@ line level    source
  176   3                              break;
  177   3                      }
  178   2      
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 4   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 4   
 
  179   2              }                             // Spin forever
  180   1      }
@@ -258,7 +258,7 @@ line level    source
  239   3                              TCON_TR0=0;
  240   3                              TL0Temp= TL0;
  241   3                              TH0Temp= TH0;
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 5   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 5   
 
  242   3                      }
  243   2              }
@@ -323,96 +323,93 @@ line level    source
  302   1          CKCON |= 0x10;
  303   1      
  304   1              while (m_second)
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 6   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 6   
 
  305   1              {
- 306   2                      //TR1 = 0;
- 307   2                      TCON &= ~0x40;
- 308   2                      TH1 = 0xF4;
- 309   2                      TL1 = 0x09;
- 310   2                      //TF1 = 0;
- 311   2                      TCON &= ~0x80;          /* Clear overflow indicator*/
- 312   2                      //TR1 = 1;
- 313   2                      TCON |= 0x40;
- 314   2                      while (!(CKCON & 0x80))
- 315   2                      {
- 316   3                              _nop_();
- 317   3                      }
- 318   2                      m_second--;
- 319   2              }
- 320   1          //TR1 = 0;
- 321   1          TCON &= ~0x40;                      /* Stop Timer1 */
- 322   1      }
- 323          
- 324          
- 325          /*
- 326          void Timer2_Init(void)
- 327          {
- 328             CKCON &= ~0x60;                     // Timer2 uses SYSCLK/12
- 329             TMR2CN &= ~0x01;
+ 306   2                      TCON_TR1 = 0;
+ 307   2                      TH1 = 0xF4;
+ 308   2                      TL1 = 0x09;
+ 309   2                      TCON_TF1 = 0;           /* Clear overflow indicator*/
+ 310   2                      TCON_TR1= 1;
+ 311   2                      while (!TCON_TF1)
+ 312   2                      {
+ 313   3                              _nop_();
+ 314   3                      }
+ 315   2                      m_second--;
+ 316   2              }
+ 317   1          //TR1 = 0;
+ 318   1              TCON_TR1 = 0;                   /* Stop Timer1 */
+ 319   1      }
+ 320          
+ 321          
+ 322          /*
+ 323          void Timer2_Init(void)
+ 324          {
+ 325             CKCON &= ~0x60;                     // Timer2 uses SYSCLK/12
+ 326             TMR2CN &= ~0x01;
+ 327          
+ 328             TMR2RL = TIMER2_RELOAD;             // Reload value to be used in Timer2
+ 329             TMR2 = TMR2RL;                      // Init the Timer2 register
  330          
- 331             TMR2RL = TIMER2_RELOAD;             // Reload value to be used in Timer2
- 332             TMR2 = TMR2RL;                      // Init the Timer2 register
- 333          
- 334             TMR2CN = 0x04;                      // Enable Timer2 in auto-reload mode
- 335             IE_ET2 = 1;                            // Timer2 interrupt enabled
- 336          }
- 337          */
- 338          
- 339          void Timer2_Init(void)
- 340          {
- 341   1              TMR2CN = 0x00;          // 16bit自动装载方式
- 342   1              TMR2RLL = 0x4F;         // 设定100ms
- 343   1              TMR2RLH = 0x9C;
+ 331             TMR2CN = 0x04;                      // Enable Timer2 in auto-reload mode
+ 332             IE_ET2 = 1;                            // Timer2 interrupt enabled
+ 333          }
+ 334          */
+ 335          
+ 336          void Timer2_Init(void)
+ 337          {
+ 338   1              TMR2CN = 0x00;          // 16bit自动装载方式
+ 339   1              TMR2RLL = 0x4F;         // 设定100ms
+ 340   1              TMR2RLH = 0x9C;
+ 341   1      
+ 342   1              TMR2L = 0x4F;
+ 343   1              TMR2H = 0x9C;
  344   1      
- 345   1              TMR2L = 0x4F;
- 346   1              TMR2H = 0x9C;
- 347   1      
- 348   1              //TR2 = 1;
- 349   1              TMR2CN_TR2 = 0;                         // enable timer2
- 350   1      }
- 351          
- 352          void Timer2_Disable(void)
- 353          {
- 354   1      
- 355   1              //timer2recording = 0x0000;     //clear count
- 356   1              //TR2 = 0;
- 357   1              TMR2CN_TR2 = 0;                         // Disable timer2
- 358   1              timer2recording = 0x0000;
- 359   1      }
- 360          
- 361          void Timer2_Enable(void)
- 362          {
- 363   1              timer2recording = 0x0000;
- 364   1              //TR2 = 1;
- 365   1              TMR2CN_TR2 = 1;                         // Enable timer2
- 366   1              //ET2 = 1;
- 367   1              IE_ET2 = 1;                             // Enable Timer2 interrupt
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/12/2021 13:42:19 PAGE 7   
+ 345   1              //TR2 = 1;
+ 346   1              TMR2CN_TR2 = 0;                         // enable timer2
+ 347   1      }
+ 348          
+ 349          void Timer2_Disable(void)
+ 350          {
+ 351   1      
+ 352   1              //timer2recording = 0x0000;     //clear count
+ 353   1              //TR2 = 0;
+ 354   1              TMR2CN_TR2 = 0;                         // Disable timer2
+ 355   1              timer2recording = 0x0000;
+ 356   1      }
+ 357          
+ 358          void Timer2_Enable(void)
+ 359          {
+ 360   1              timer2recording = 0x0000;
+ 361   1              //TR2 = 1;
+ 362   1              TMR2CN_TR2 = 1;                         // Enable timer2
+ 363   1              //ET2 = 1;
+ 364   1              IE_ET2 = 1;                             // Enable Timer2 interrupt
+ 365   1              //EA = 1;                                       // Enable All interrupt control
+ 366   1      }
+ 367          
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/15/2021 11:30:28 PAGE 7   
 
- 368   1              //EA = 1;                                       // Enable All interrupt control
- 369   1      }
- 370          
- 371          //-----------------------------------------------------------------------------
- 372          // Interrupt Service Routines
- 373          //-----------------------------------------------------------------------------
- 374          
- 375          //-----------------------------------------------------------------------------
- 376          // Timer2_ISR
- 377          //-----------------------------------------------------------------------------
- 378          //
- 379          // Here we process the Timer2 interrupt and toggle the LED
- 380          //
- 381          //-----------------------------------------------------------------------------
- 382          INTERRUPT_PROTO(Timer2_ISR, 5)
- 383          {
- 384   1         TMR2CN_TF2H = 0;                           // Reset Interrupt
- 385   1         timer2recording++;
- 386   1      }
+ 368          //-----------------------------------------------------------------------------
+ 369          // Interrupt Service Routines
+ 370          //-----------------------------------------------------------------------------
+ 371          
+ 372          //-----------------------------------------------------------------------------
+ 373          // Timer2_ISR
+ 374          //-----------------------------------------------------------------------------
+ 375          //
+ 376          // Here we process the Timer2 interrupt and toggle the LED
+ 377          //
+ 378          //-----------------------------------------------------------------------------
+ 379          INTERRUPT_PROTO(Timer2_ISR, 5)
+ 380          {
+ 381   1         TMR2CN_TF2H = 0;                           // Reset Interrupt
+ 382   1         timer2recording++;
+ 383   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    686    ----
+   CODE SIZE        =    680    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

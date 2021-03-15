@@ -85,7 +85,7 @@ int main (void)
 				{
 					while(!P0_B6)
 					{
-						if(timer2recording > 5000)
+						if(timer2recording > 50)
 						{
 							BootFlag = 0x01;
 							BootStage = BOOT_FAIL;
@@ -303,22 +303,19 @@ void wait_ms(unsigned short m_second)
 
    	while (m_second)
 	{
-   		//TR1 = 0;
-   		TCON &= ~0x40;
+   		TCON_TR1 = 0;
    		TH1 = 0xF4;
    		TL1 = 0x09;
-   		//TF1 = 0;
-   		TCON &= ~0x80;		/* Clear overflow indicator*/
-   		//TR1 = 1;
-   		TCON |= 0x40;
-   		while (!(CKCON & 0x80))
+   		TCON_TF1 = 0;		/* Clear overflow indicator*/
+   		TCON_TR1= 1;
+   		while (!TCON_TF1)
    		{
    			_nop_();
    		}
    		m_second--;
 	}
     //TR1 = 0;
-    TCON &= ~0x40;			/* Stop Timer1 */
+   	TCON_TR1 = 0;			/* Stop Timer1 */
 }
 
 
