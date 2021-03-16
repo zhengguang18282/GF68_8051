@@ -22,7 +22,7 @@ src/%.OBJ: ../src/%.c
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/GF68_8051_main.OBJ: D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.5/Device/C8051F300/inc/SI_C8051F300_Register_Enums.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.5/Device/C8051F300/inc/SI_C8051F300_Defs.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.5/Device/shared/si8051Base/compiler_defs.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.5/Device/shared/si8051Base/stdbool.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.5/Device/shared/si8051Base/stdint.h
+src/GF68_8051_main.OBJ: D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.7/Device/C8051F300/inc/SI_C8051F300_Register_Enums.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.7/Device/C8051F300/inc/SI_C8051F300_Defs.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.7/Device/shared/si8051Base/si_toolchain.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.7/Device/shared/si8051Base/stdint.h D:/8051_mcu_ide/install/developer/sdks/8051/v4.1.7/Device/shared/si8051Base/stdbool.h
 
 src/%.OBJ: ../src/%.A51
 	@echo 'Building file: $<'

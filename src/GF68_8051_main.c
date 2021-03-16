@@ -20,7 +20,7 @@ void SiLabs_Startup (void)
 }
 
 
-INTERRUPT_PROTO(Timer2_ISR, 5);
+SI_INTERRUPT_PROTO(Timer2_ISR, 5);
 void Timer2_Init(void);
 void Timer2_Disable(void);
 void Timer2_Enable(void);
@@ -106,7 +106,7 @@ int main (void)
 			}
 			else if(BootFlag == 0x03)
 			{
-				if(timer2recording > 550)
+				if((timer2recording > 550) || (!P0_B6))
 				{
 					BootFlag = 0x01;
 					BootStage = BOOT_FAIL;
@@ -114,6 +114,7 @@ int main (void)
 					break;
 				}
 
+#if 0
 				if(!P0_B6)
 				{
 					BootFlag = 0x01;
@@ -121,6 +122,7 @@ int main (void)
 					Timer2_Disable();
 					break;
 				}
+#endif
 
 				//if(calculate_pwm_frequency() ==1)
 				if(!P0_B7)
@@ -381,7 +383,7 @@ void Timer2_Enable(void)
 // Here we process the Timer2 interrupt and toggle the LED
 //
 //-----------------------------------------------------------------------------
-INTERRUPT_PROTO(Timer2_ISR, 5)
+SI_INTERRUPT(Timer2_ISR, 5)
 {
    TMR2CN_TF2H = 0;                           // Reset Interrupt
    timer2recording++;
