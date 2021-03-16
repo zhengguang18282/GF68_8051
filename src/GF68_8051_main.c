@@ -124,8 +124,8 @@ int main (void)
 				}
 #endif
 
-				//if(calculate_pwm_frequency() ==1)
-				if(!P0_B7)
+				if(calculate_pwm_frequency() ==1)
+				//if(!P0_B7)
 				{
 					BootFlag = 0x11;
 					BootStage = IDLE;
@@ -207,7 +207,7 @@ unsigned char CheckP0B4PressTime(unsigned short Min, unsigned short Max)
 // 255KHz Sample Rate, So 200-300 conters
 unsigned char calculate_pwm_frequency ()
 {
-#if 0
+#if 1
 	unsigned short timercount = 0x0000;
 	Set_Timer0();
 	Start_Stop_timer();
@@ -219,7 +219,7 @@ unsigned char calculate_pwm_frequency ()
 	else if(timercount >=23 && timercount <=28 ) return 10;		// about 9KHz~11Hz for USB reset
 	else return false;									// other false
 #endif
-	return 1;
+	//return 1;
 }
 
 void Set_Timer0()
@@ -287,7 +287,7 @@ void Port_IO_Init()
     // P0.7  -  Unassigned,  Open-Drain, Digital
 
     P0MDOUT   |= 0x2D;
-    P0        &= ~0x04;
+    P0        &= ~0x14;
     XBR2      = 0xC0;
 }
 
