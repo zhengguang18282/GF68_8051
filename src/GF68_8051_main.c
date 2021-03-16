@@ -287,7 +287,7 @@ void Port_IO_Init()
     // P0.7  -  Unassigned,  Open-Drain, Digital
 
     P0MDOUT   |= 0x2D;
-    P0        &= ~0x14;
+    P0        &= ~0x84;
     XBR2      = 0xC0;
 }
 
