@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 1   
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE GF68_8051_MAIN
@@ -55,103 +55,94 @@ line level    source
   42          unsigned char BootFlag;
   43          
   44          unsigned char ResetTimes;
-  45          
-  46          unsigned short timer2recording = 0x0000;
-  47          unsigned char TL0Temp = 0x00;
-  48          unsigned char TH0Temp = 0x00;
-  49          
-  50          //-----------------------------------------------------------------------------
-  51          // main() Routine
-  52          // ----------------------------------------------------------------------------
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 2   
+  45          unsigned short P4PressTime;
+  46          
+  47          unsigned short timer2recording = 0x0000;
+  48          unsigned char TL0Temp = 0x00;
+  49          unsigned char TH0Temp = 0x00;
+  50          
+  51          //-----------------------------------------------------------------------------
+  52          // main() Routine
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 2   
 
-  53          // Note: the software watchdog timer is not disabled by default in this
-  54          // example, so a long-running program will reset periodically unless
-  55          // the timer is disabled or your program periodically writes to it.
-  56          //
-  57          // Review the "Watchdog Timer" section under the part family's datasheet
-  58          // for details. To find the datasheet, select your part in the
-  59          // Simplicity Launcher and click on "Data Sheet".
-  60          //-----------------------------------------------------------------------------
-  61          int main (void)
-  62          {
-  63   1              Init_Device();
-  64   1              Timer2_Init();
-  65   1              Timer2_Disable();
-  66   1              Interrupts_Init();
-  67   1      
-  68   1              BootFlag = 0x01;
-  69   1              BootStage = STARTUP;
-  70   1      
-  71   1              while (1)
-  72   1              {
-  73   2                      switch(BootStage)
-  74   2                      {
-  75   3                      case STARTUP:
-  76   3                              if(BootFlag == 0x01)
-  77   3                              {
-  78   4                                      if(CheckP0B4PressTime(16,500))
-  79   4                                      {
-  80   5                                              BootFlag = 0x02;
-  81   5                                              Timer2_Enable();
-  82   5                                      }
-  83   4                              }
-  84   3                              else if(BootFlag == 0x02)
-  85   3                              {
-  86   4                                      if(!P0_B6)
-  87   4                                      {
-  88   5                                              while(!P0_B6)
-  89   5                                              {
-  90   6                                                      if(timer2recording > 50)
-  91   6                                                      {
-  92   7                                                              BootFlag = 0x01;
-  93   7                                                              BootStage = BOOT_FAIL;
-  94   7                                                              Timer2_Disable();
-  95   7                                                              break;
-  96   7                                                      }
-  97   6                                              }
-  98   5                                      }
-  99   4      
- 100   4                                      if((P0_B6) && (BootFlag == 0x02))
- 101   4                                      {
- 102   5                                              BootFlag = 0x03;
- 103   5                                              Timer2_Disable();
- 104   5                                              Timer2_Enable();
- 105   5                                      }
- 106   4                              }
- 107   3                              else if(BootFlag == 0x03)
- 108   3                              {
- 109   4                                      if((timer2recording > 550) || (!P0_B6))
- 110   4                                      {
- 111   5                                              BootFlag = 0x01;
- 112   5                                              BootStage = BOOT_FAIL;
- 113   5                                              Timer2_Disable();
- 114   5                                              break;
- 115   5                                      }
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 3   
+  53          // ----------------------------------------------------------------------------
+  54          // Note: the software watchdog timer is not disabled by default in this
+  55          // example, so a long-running program will reset periodically unless
+  56          // the timer is disabled or your program periodically writes to it.
+  57          //
+  58          // Review the "Watchdog Timer" section under the part family's datasheet
+  59          // for details. To find the datasheet, select your part in the
+  60          // Simplicity Launcher and click on "Data Sheet".
+  61          //-----------------------------------------------------------------------------
+  62          int main (void)
+  63          {
+  64   1              Init_Device();
+  65   1              Timer2_Init();
+  66   1              Timer2_Disable();
+  67   1              Interrupts_Init();
+  68   1      
+  69   1              BootFlag = 0x01;
+  70   1              BootStage = STARTUP;
+  71   1              ResetTimes = 0;
+  72   1      
+  73   1              while (1)
+  74   1              {
+  75   2                      switch(BootStage)
+  76   2                      {
+  77   3                      case STARTUP:
+  78   3                              if(BootFlag == 0x01)
+  79   3                              {
+  80   4                                      if(CheckP0B4PressTime(16,500))
+  81   4                                      {
+  82   5                                              BootFlag = 0x02;
+  83   5                                              Timer2_Enable();
+  84   5                                      }
+  85   4                              }
+  86   3                              else if(BootFlag == 0x02)
+  87   3                              {
+  88   4                                      if(!P0_B6)
+  89   4                                      {
+  90   5                                              while(!P0_B6)
+  91   5                                              {
+  92   6                                                      if(timer2recording > 50)
+  93   6                                                      {
+  94   7                                                              BootFlag = 0x01;
+  95   7                                                              BootStage = BOOT_FAIL;
+  96   7                                                              Timer2_Disable();
+  97   7                                                              break;
+  98   7                                                      }
+  99   6                                              }
+ 100   5                                      }
+ 101   4      
+ 102   4                                      if((P0_B6) && (BootFlag == 0x02))
+ 103   4                                      {
+ 104   5                                              BootFlag = 0x03;
+ 105   5                                              Timer2_Disable();
+ 106   5                                              Timer2_Enable();
+ 107   5                                      }
+ 108   4                              }
+ 109   3                              else if(BootFlag == 0x03)
+ 110   3                              {
+ 111   4                                      if((timer2recording > 550) || (!P0_B6))
+ 112   4                                      {
+ 113   5                                              BootFlag = 0x01;
+ 114   5                                              BootStage = BOOT_FAIL;
+ 115   5                                              Timer2_Disable();
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 3   
 
- 116   4      
- 117   4      #if 0
-                                              if(!P0_B6)
-                                              {
-                                                      BootFlag = 0x01;
-                                                      BootStage = BOOT_FAIL;
-                                                      Timer2_Disable();
-                                                      break;
-                                              }
-              #endif
- 126   4      
- 127   4                                      if(calculate_pwm_frequency() ==1)
- 128   4                                      //if(!P0_B7)
- 129   4                                      {
- 130   5                                              BootFlag = 0x11;
- 131   5                                              BootStage = IDLE;
- 132   5                                              Timer2_Disable();
- 133   5                                      }
- 134   4                              }
- 135   3                              break;
- 136   3                      case IDLE:
- 137   3      #if 0
+ 116   5                                              break;
+ 117   5                                      }
+ 118   4      
+ 119   4                                      if(calculate_pwm_frequency() == 1)
+ 120   4                                      {
+ 121   5                                              BootFlag = 0x11;
+ 122   5                                              BootStage = IDLE;
+ 123   5                                              Timer2_Disable();
+ 124   5                                      }
+ 125   4                              }
+ 126   3                              break;
+ 127   3                      case IDLE:
+ 128   3      #if 0
                                       if(BootFlag == 0x11)
                                       {
                                               if(!P0_B6)
@@ -180,249 +171,290 @@ line level    source
                                               Timer2_Enable();
                                       }
               #endif
- 166   3                              break;
- 167   3                      case BOOT_FAIL:
- 168   3                              P0_B3=0;
- 169   3                              wait_ms(5);
- 170   3                              P0_B2=1;
- 171   3                              wait_ms(5);
- 172   3                              P0_B2=0;
- 173   3                              wait_ms(5);
- 174   3                              P0_B3=1;
- 175   3                              wait_ms(10);
- 176   3                              P0_B0=0;
- 177   3                              wait_ms(100);
- 178   3                              P0_B0=1;
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 4   
+ 157   3                              break;
+ 158   3                      case BOOT_FAIL:
+ 159   3                              ResetTimes++;
+ 160   3                              if(ResetTimes > 3)
+ 161   3                              {
+ 162   4                                      BootStage = POWEROFF;
+ 163   4                                      Timer2_Disable();
+ 164   4                                      break;
+ 165   4                              }
+ 166   3                              P0_B3=0;
+ 167   3                              wait_ms(5);
+ 168   3                              P0_B2=1;
+ 169   3                              wait_ms(5000);
+ 170   3                              P0_B2=0;
+ 171   3                              wait_ms(2000);
+ 172   3                              P0_B3=1;
+ 173   3                              wait_ms(2000);
+ 174   3                              Timer2_Disable();
+ 175   3                              P0_B0=0;
+ 176   3                              P4PressTime = 0;
+ 177   3                              Timer2_Enable();
+ 178   3                              while(timer2recording < 1)
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 4   
 
- 179   3                              BootStage = STARTUP;
- 180   3                              BootFlag = 0x01;
- 181   3                              break;
- 182   3                      case POWEROFF:
- 183   3                              break;
- 184   3                      }
- 185   2      
- 186   2              }                             // Spin forever
- 187   1      }
- 188          
- 189          unsigned char CheckP0B4PressTime(unsigned short Min, unsigned short Max)
- 190          {
- 191   1              unsigned short checkloop = 0;
- 192   1      
- 193   1              for(checkloop=0;checkloop<=0xffff;checkloop++)
- 194   1              {
- 195   2                      if(!P0_B4)  wait_ms(1);
- 196   2                      else break;
- 197   2              }
- 198   1      
- 199   1              if((checkloop > Min) && (checkloop < Max))
- 200   1                      return 1;
- 201   1      
- 202   1              return 0;
- 203   1      }
- 204          
- 205          /*----------------------------------------------------------------------*/
- 206          /* Calculate PWM frequency 1KHz*/
- 207          // 255KHz Sample Rate, So 200-300 conters
- 208          unsigned char calculate_pwm_frequency ()
- 209          {
- 210   1      #if 1
- 211   1              unsigned short timercount = 0x0000;
- 212   1              Set_Timer0();
- 213   1              Start_Stop_timer();
- 214   1              timercount = (TH0Temp<<8)| TL0Temp;
- 215   1      
- 216   1              if(timercount>= 232 && timercount <= 283) return 1;             // 1KHz range 0.9KHz~1.1KHz
- 217   1              else if(timercount>= 120 && timercount <= 160) return 2;        // 1.82KHz      1.60KHz~2.13KHz
- 218   1              else if (timercount >=77 && timercount <=94 ) return 3;         // about 2.7KHz~3.3KHz
- 219   1              else if(timercount >=23 && timercount <=28 ) return 10;         // about 9KHz~11Hz for USB reset
- 220   1              else return false;                                                                      // other false
- 221   1      #endif
- 222   1              //return 1;
- 223   1      }
- 224          
- 225          void Set_Timer0()
- 226          {
- 227   1                      TMOD &= ~0x0F;
- 228   1                      TMOD |=  0x01;
- 229   1                      CKCON |= 0x04;
- 230   1                      TCON_TR0=0;
- 231   1                      TCON_TF0=0;
- 232   1                      TH0=0;
- 233   1                      TL0=0;
- 234   1      
- 235   1      }
- 236          
- 237          void Start_Stop_timer()
- 238          {
- 239   1              if(PWM_toggle())
- 240   1              {
- 241   2      
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 5   
+ 179   3                              {
+ 180   4                                      if(!P0_B4)
+ 181   4                                      {
+ 182   5                                              wait_ms(1);
+ 183   5                                              P4PressTime++;
+ 184   5                                      }
+ 185   4                                      else
+ 186   4                                      {
+ 187   5                                              P4PressTime = 0;
+ 188   5                                      }
+ 189   4                              }
+ 190   3                              P0_B0=1;
+ 191   3                              Timer2_Disable();
+ 192   3                              while(!P0_B4)
+ 193   3                              {
+ 194   4                                      wait_ms(1);
+ 195   4                                      P4PressTime++;
+ 196   4                                      if(P4PressTime > 500)
+ 197   4                                              break;
+ 198   4                              }
+ 199   3                              if((P4PressTime > 15) && (P4PressTime < 501))
+ 200   3                              {
+ 201   4                                      BootStage = STARTUP;
+ 202   4                                      BootFlag = 0x02;
+ 203   4                                      Timer2_Enable();
+ 204   4                              }
+ 205   3                              else
+ 206   3                              {
+ 207   4                                      BootStage = BOOT_FAIL;
+ 208   4                              }
+ 209   3                              break;
+ 210   3                      case POWEROFF:
+ 211   3                              P0_B3=0;
+ 212   3                              wait_ms(2000);
+ 213   3                              P0_B2=1;
+ 214   3                              break;
+ 215   3                      }
+ 216   2      
+ 217   2              }                             // Spin forever
+ 218   1      }
+ 219          
+ 220          unsigned char CheckP0B4PressTime(unsigned short Min, unsigned short Max)
+ 221          {
+ 222   1              unsigned short checkloop = 0;
+ 223   1      
+ 224   1              for(checkloop=0;checkloop<=0xffff;checkloop++)
+ 225   1              {
+ 226   2                      if(!P0_B4)  wait_ms(1);
+ 227   2                      else break;
+ 228   2              }
+ 229   1      
+ 230   1              if((checkloop > Min) && (checkloop < Max))
+ 231   1                      return 1;
+ 232   1      
+ 233   1              return 0;
+ 234   1      }
+ 235          
+ 236          /*----------------------------------------------------------------------*/
+ 237          /* Calculate PWM frequency 1KHz*/
+ 238          // 255KHz Sample Rate, So 200-300 conters
+ 239          unsigned char calculate_pwm_frequency ()
+ 240          {
+ 241   1      #if 1
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 5   
 
- 242   2                      TCON_TR0=1;
- 243   2      
- 244   2                      if(PWM_toggle())
- 245   2                      {
- 246   3                              TCON_TR0=0;
- 247   3                              TL0Temp= TL0;
- 248   3                              TH0Temp= TH0;
- 249   3                      }
- 250   2              }
- 251   1      }
- 252          
- 253          unsigned char PWM_toggle()
- 254          {
- 255   1              unsigned long i,j;
- 256   1      
- 257   1              for(i=0;i<=0xfff;i++)
- 258   1              {
- 259   2                      if(!P0_B7)break;
- 260   2                      i+=1;
- 261   2              }
- 262   1      
- 263   1              for(j=0;j<=0xfff;j++)
- 264   1              {
- 265   2                      if(P0_B7)break;
- 266   2                      j+=1;
- 267   2              }
- 268   1              return true;
- 269   1      }
- 270          
- 271          void Interrupts_Init()
- 272          {
- 273   1              IE_EA = 1;
- 274   1              IE_ET2 = 1;
- 275   1      }
- 276          // Peripheral specific initialization functions,
- 277          // Called from the Init_Device() function
- 278          void Port_IO_Init()
- 279          {
- 280   1          // P0.0  -  Unassigned,  Push-Pull,  Digital
- 281   1          // P0.1  -  Unassigned,  Open-Drain, Digital
- 282   1          // P0.2  -  Unassigned,  Push-Pull,  Digital
- 283   1          // P0.3  -  Unassigned,  Push-Pull,  Digital
- 284   1          // P0.4  -  Unassigned,  Open-Drain, Digital
- 285   1          // P0.5  -  Unassigned,  Push-Pull,  Digital
- 286   1          // P0.6  -  Unassigned,  Open-Drain, Digital
- 287   1          // P0.7  -  Unassigned,  Open-Drain, Digital
- 288   1      
- 289   1          P0MDOUT   |= 0x2D;
- 290   1          P0        &= ~0x84;
- 291   1          XBR2      = 0xC0;
- 292   1      }
- 293          
- 294          // Initialization function for device,
- 295          // Call Init_Device() from your main program
- 296          void Init_Device(void)
- 297          {
- 298   1          Port_IO_Init();
- 299   1      }
- 300          
- 301          /*----------------------------------------------------------------------*/
- 302          /* ms delay routine */
- 303          void wait_ms(unsigned short m_second)
- 304          {
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 6   
+ 242   1              unsigned short timercount = 0x0000;
+ 243   1              Set_Timer0();
+ 244   1              Start_Stop_timer();
+ 245   1              timercount = (TH0Temp<<8)| TL0Temp;
+ 246   1      
+ 247   1              if(timercount>= 232 && timercount <= 283) return 1;             // 1KHz range 0.9KHz~1.1KHz
+ 248   1              else if(timercount>= 120 && timercount <= 160) return 2;        // 1.82KHz      1.60KHz~2.13KHz
+ 249   1              else if (timercount >=77 && timercount <=94 ) return 3;         // about 2.7KHz~3.3KHz
+ 250   1              else if(timercount >=23 && timercount <=28 ) return 10;         // about 9KHz~11Hz for USB reset
+ 251   1              else return false;                                                                      // other false
+ 252   1      #endif
+ 253   1              //return 1;
+ 254   1      }
+ 255          
+ 256          void Set_Timer0()
+ 257          {
+ 258   1                      TMOD &= ~0x0F;
+ 259   1                      TMOD |=  0x01;
+ 260   1                      CKCON |= 0x04;
+ 261   1                      TCON_TR0=0;
+ 262   1                      TCON_TF0=0;
+ 263   1                      TH0=0;
+ 264   1                      TL0=0;
+ 265   1      
+ 266   1      }
+ 267          
+ 268          void Start_Stop_timer()
+ 269          {
+ 270   1              if(PWM_toggle())
+ 271   1              {
+ 272   2      
+ 273   2                      TCON_TR0=1;
+ 274   2      
+ 275   2                      if(PWM_toggle())
+ 276   2                      {
+ 277   3                              TCON_TR0=0;
+ 278   3                              TL0Temp= TL0;
+ 279   3                              TH0Temp= TH0;
+ 280   3                      }
+ 281   2              }
+ 282   1      }
+ 283          
+ 284          unsigned char PWM_toggle()
+ 285          {
+ 286   1              unsigned long i,j;
+ 287   1      
+ 288   1              for(i=0;i<=0xfff;i++)
+ 289   1              {
+ 290   2                      if(!P0_B7)break;
+ 291   2                      i+=1;
+ 292   2              }
+ 293   1      
+ 294   1              for(j=0;j<=0xfff;j++)
+ 295   1              {
+ 296   2                      if(P0_B7)break;
+ 297   2                      j+=1;
+ 298   2              }
+ 299   1              return true;
+ 300   1      }
+ 301          
+ 302          void Interrupts_Init()
+ 303          {
+ 304   1              IE_EA = 1;
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 6   
 
- 305   1      
- 306   1              TCON &= ~0xC0;
- 307   1          TMOD &= ~0xF0;
- 308   1          TMOD |=  0x10;
- 309   1          CKCON |= 0x10;
- 310   1      
- 311   1              while (m_second)
- 312   1              {
- 313   2                      TCON_TR1 = 0;
- 314   2                      TH1 = 0xF4;
- 315   2                      TL1 = 0x09;
- 316   2                      TCON_TF1 = 0;           /* Clear overflow indicator*/
- 317   2                      TCON_TR1= 1;
- 318   2                      while (!TCON_TF1)
- 319   2                      {
- 320   3                              _nop_();
- 321   3                      }
- 322   2                      m_second--;
- 323   2              }
- 324   1          //TR1 = 0;
- 325   1              TCON_TR1 = 0;                   /* Stop Timer1 */
- 326   1      }
- 327          
- 328          
- 329          /*
- 330          void Timer2_Init(void)
- 331          {
- 332             CKCON &= ~0x60;                     // Timer2 uses SYSCLK/12
- 333             TMR2CN &= ~0x01;
- 334          
- 335             TMR2RL = TIMER2_RELOAD;             // Reload value to be used in Timer2
- 336             TMR2 = TMR2RL;                      // Init the Timer2 register
- 337          
- 338             TMR2CN = 0x04;                      // Enable Timer2 in auto-reload mode
- 339             IE_ET2 = 1;                            // Timer2 interrupt enabled
- 340          }
- 341          */
- 342          
- 343          void Timer2_Init(void)
- 344          {
- 345   1              TMR2CN = 0x00;          // 16bit自动装载方式
- 346   1              TMR2RLL = 0x4F;         // 设定100ms
- 347   1              TMR2RLH = 0x9C;
- 348   1      
- 349   1              TMR2L = 0x4F;
- 350   1              TMR2H = 0x9C;
- 351   1      
- 352   1              //TR2 = 1;
- 353   1              TMR2CN_TR2 = 0;                         // enable timer2
- 354   1      }
- 355          
- 356          void Timer2_Disable(void)
- 357          {
- 358   1      
- 359   1              //timer2recording = 0x0000;     //clear count
- 360   1              //TR2 = 0;
- 361   1              TMR2CN_TR2 = 0;                         // Disable timer2
- 362   1              timer2recording = 0x0000;
- 363   1      }
- 364          
- 365          void Timer2_Enable(void)
- 366          {
- 367   1              timer2recording = 0x0000;
-C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/16/2021 16:41:16 PAGE 7   
+ 305   1              IE_ET2 = 1;
+ 306   1      }
+ 307          // Peripheral specific initialization functions,
+ 308          // Called from the Init_Device() function
+ 309          void Port_IO_Init()
+ 310          {
+ 311   1          // P0.0  -  Unassigned,  Push-Pull,  Digital
+ 312   1          // P0.1  -  Unassigned,  Open-Drain, Digital
+ 313   1          // P0.2  -  Unassigned,  Push-Pull,  Digital
+ 314   1          // P0.3  -  Unassigned,  Push-Pull,  Digital
+ 315   1          // P0.4  -  Unassigned,  Open-Drain, Digital
+ 316   1          // P0.5  -  Unassigned,  Push-Pull,  Digital
+ 317   1          // P0.6  -  Unassigned,  Open-Drain, Digital
+ 318   1          // P0.7  -  Unassigned,  Open-Drain, Digital
+ 319   1      
+ 320   1          P0MDOUT   |= 0x2D;
+ 321   1          P0        &= ~0x84;
+ 322   1          XBR2      = 0xC0;
+ 323   1      }
+ 324          
+ 325          // Initialization function for device,
+ 326          // Call Init_Device() from your main program
+ 327          void Init_Device(void)
+ 328          {
+ 329   1          Port_IO_Init();
+ 330   1      }
+ 331          
+ 332          /*----------------------------------------------------------------------*/
+ 333          /* ms delay routine */
+ 334          void wait_ms(unsigned short m_second)
+ 335          {
+ 336   1      
+ 337   1              TCON &= ~0xC0;
+ 338   1          TMOD &= ~0xF0;
+ 339   1          TMOD |=  0x10;
+ 340   1          CKCON |= 0x10;
+ 341   1      
+ 342   1              while (m_second)
+ 343   1              {
+ 344   2                      TCON_TR1 = 0;
+ 345   2                      TH1 = 0xF4;
+ 346   2                      TL1 = 0x09;
+ 347   2                      TCON_TF1 = 0;           /* Clear overflow indicator*/
+ 348   2                      TCON_TR1= 1;
+ 349   2                      while (!TCON_TF1)
+ 350   2                      {
+ 351   3                              _nop_();
+ 352   3                      }
+ 353   2                      m_second--;
+ 354   2              }
+ 355   1          //TR1 = 0;
+ 356   1              TCON_TR1 = 0;                   /* Stop Timer1 */
+ 357   1      }
+ 358          
+ 359          
+ 360          /*
+ 361          void Timer2_Init(void)
+ 362          {
+ 363             CKCON &= ~0x60;                     // Timer2 uses SYSCLK/12
+ 364             TMR2CN &= ~0x01;
+ 365          
+ 366             TMR2RL = TIMER2_RELOAD;             // Reload value to be used in Timer2
+ 367             TMR2 = TMR2RL;                      // Init the Timer2 register
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 7   
 
- 368   1              //TR2 = 1;
- 369   1              TMR2CN_TR2 = 1;                         // Enable timer2
- 370   1              //ET2 = 1;
- 371   1              IE_ET2 = 1;                             // Enable Timer2 interrupt
- 372   1              //EA = 1;                                       // Enable All interrupt control
- 373   1      }
- 374          
- 375          //-----------------------------------------------------------------------------
- 376          // Interrupt Service Routines
- 377          //-----------------------------------------------------------------------------
- 378          
- 379          //-----------------------------------------------------------------------------
- 380          // Timer2_ISR
- 381          //-----------------------------------------------------------------------------
- 382          //
- 383          // Here we process the Timer2 interrupt and toggle the LED
- 384          //
- 385          //-----------------------------------------------------------------------------
- 386          SI_INTERRUPT(Timer2_ISR, 5)
- 387          {
- 388   1         TMR2CN_TF2H = 0;                           // Reset Interrupt
- 389   1         timer2recording++;
- 390   1      }
+ 368          
+ 369             TMR2CN = 0x04;                      // Enable Timer2 in auto-reload mode
+ 370             IE_ET2 = 1;                            // Timer2 interrupt enabled
+ 371          }
+ 372          */
+ 373          
+ 374          void Timer2_Init(void)
+ 375          {
+ 376   1              TMR2CN = 0x00;          // 16bit自动装载方式
+ 377   1              TMR2RLL = 0x4F;         // 设定100ms
+ 378   1              TMR2RLH = 0x9C;
+ 379   1      
+ 380   1              TMR2L = 0x4F;
+ 381   1              TMR2H = 0x9C;
+ 382   1      
+ 383   1              //TR2 = 1;
+ 384   1              TMR2CN_TR2 = 0;                         // enable timer2
+ 385   1      }
+ 386          
+ 387          void Timer2_Disable(void)
+ 388          {
+ 389   1              TMR2L = 0x4F;
+ 390   1              TMR2H = 0x9C;
+ 391   1              TMR2CN_TR2 = 0;                         // Disable timer2
+ 392   1              timer2recording = 0x0000;
+ 393   1      }
+ 394          
+ 395          void Timer2_Enable(void)
+ 396          {
+ 397   1              timer2recording = 0x0000;
+ 398   1              //TR2 = 1;
+ 399   1              TMR2CN_TR2 = 1;                         // Enable timer2
+ 400   1              //ET2 = 1;
+ 401   1              IE_ET2 = 1;                             // Enable Timer2 interrupt
+ 402   1              //EA = 1;                                       // Enable All interrupt control
+ 403   1      }
+ 404          
+ 405          //-----------------------------------------------------------------------------
+ 406          // Interrupt Service Routines
+ 407          //-----------------------------------------------------------------------------
+ 408          
+ 409          //-----------------------------------------------------------------------------
+ 410          // Timer2_ISR
+ 411          //-----------------------------------------------------------------------------
+ 412          //
+ 413          // Here we process the Timer2 interrupt and toggle the LED
+ 414          //
+ 415          //-----------------------------------------------------------------------------
+ 416          SI_INTERRUPT(Timer2_ISR, 5)
+ 417          {
+ 418   1         TMR2CN_TF2H = 0;                           // Reset Interrupt
+ 419   1         timer2recording++;
+ 420   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    694    ----
+   CODE SIZE        =    835    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      7      14
+   DATA SIZE        =      9      14
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
+C51 COMPILER V9.60.0.0   GF68_8051_MAIN                                                    03/18/2021 14:31:48 PAGE 8   
+
    EDATA SIZE       =   ----    ----
    HDATA SIZE       =   ----    ----
    XDATA CONST SIZE =   ----    ----

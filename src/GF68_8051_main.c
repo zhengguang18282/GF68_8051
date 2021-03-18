@@ -42,6 +42,7 @@ unsigned char BootStage;
 unsigned char BootFlag;
 
 unsigned char ResetTimes;
+unsigned short P4PressTime;
 
 unsigned short timer2recording = 0x0000;
 unsigned char TL0Temp = 0x00;
@@ -67,6 +68,7 @@ int main (void)
 
 	BootFlag = 0x01;
 	BootStage = STARTUP;
+	ResetTimes = 0;
 
 	while (1)
 	{
@@ -114,18 +116,7 @@ int main (void)
 					break;
 				}
 
-#if 0
-				if(!P0_B6)
-				{
-					BootFlag = 0x01;
-					BootStage = BOOT_FAIL;
-					Timer2_Disable();
-					break;
-				}
-#endif
-
-				if(calculate_pwm_frequency() ==1)
-				//if(!P0_B7)
+				if(calculate_pwm_frequency() == 1)
 				{
 					BootFlag = 0x11;
 					BootStage = IDLE;
@@ -165,21 +156,61 @@ int main (void)
 #endif
 			break;
 		case BOOT_FAIL:
+			ResetTimes++;
+			if(ResetTimes > 3)
+			{
+				BootStage = POWEROFF;
+				Timer2_Disable();
+				break;
+			}
 			P0_B3=0;
 			wait_ms(5);
 			P0_B2=1;
-			wait_ms(5);
+			wait_ms(5000);
 			P0_B2=0;
-			wait_ms(5);
+			wait_ms(2000);
 			P0_B3=1;
-			wait_ms(10);
+			wait_ms(2000);
+			Timer2_Disable();
 			P0_B0=0;
-			wait_ms(100);
+			P4PressTime = 0;
+			Timer2_Enable();
+			while(timer2recording < 1)
+			{
+				if(!P0_B4)
+				{
+					wait_ms(1);
+					P4PressTime++;
+				}
+				else
+				{
+					P4PressTime = 0;
+				}
+			}
 			P0_B0=1;
-			BootStage = STARTUP;
-			BootFlag = 0x01;
+			Timer2_Disable();
+			while(!P0_B4)
+			{
+				wait_ms(1);
+				P4PressTime++;
+				if(P4PressTime > 500)
+					break;
+			}
+			if((P4PressTime > 15) && (P4PressTime < 501))
+			{
+				BootStage = STARTUP;
+				BootFlag = 0x02;
+				Timer2_Enable();
+			}
+			else
+			{
+				BootStage = BOOT_FAIL;
+			}
 			break;
 		case POWEROFF:
+			P0_B3=0;
+			wait_ms(2000);
+			P0_B2=1;
 			break;
 		}
 
@@ -355,9 +386,8 @@ void Timer2_Init(void)
 
 void Timer2_Disable(void)
 {
-
-	//timer2recording = 0x0000;	//clear count
-	//TR2 = 0;
+	TMR2L = 0x4F;
+	TMR2H =	0x9C;
 	TMR2CN_TR2 = 0;				// Disable timer2
 	timer2recording = 0x0000;
 }
